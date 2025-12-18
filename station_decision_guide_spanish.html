@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué Estación Debo Visitar?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-8">
+    <div id="app" class="max-w-4xl mx-auto">
+        <!-- Content will be inserted here by JavaScript -->
+    </div>
+
+    <script>
+        let currentStep = 'start';
+        let history = ['start'];
+
+        function goBack() {
+            if (history.length > 1) {
+                history.pop();
+                currentStep = history[history.length - 1];
+                render();
+            }
+        }
+
+        function navigate(step) {
+            history.push(step);
+            currentStep = step;
+            render();
+        }
+
+        function reset() {
+            currentStep = 'start';
+            history = ['start'];
+            render();
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            let content = '';
+
+            // Back button (if not on start)
+            if (history.length > 1 && currentStep !== 'start') {
+                content += `
+                    <button onclick="goBack()" class="mb-6 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md">
+                        ← Volver
+                    </button>
+                `;
+            }
+
+            content += '<div class="bg-white rounded-2xl shadow-2xl p-8 md:p-12">';
+
+            switch (currentStep) {
+                case 'start':
+                    content += `
+                        <div class="text-center space-y-8">
+                            <h1 class="text-4xl font-bold text-green-700 mb-4">
+                                ¿Qué Estación Debo Visitar?
+                            </h1>
+                            <p class="text-lg text-gray-600 mb-2">Guía de Decisión de Estaciones (Estaciones 1-6)</p>
+                            <p class="text-xl text-gray-700 mb-8">
+                                ¿Cómo te sientes en este momento?
+                            </p>
+                            
+                            <div class="grid gap-4 max-w-2xl mx-auto">
+                                <button onclick="navigate('overwhelmed')" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg shadow-lg transform transition hover:scale-105">
+                                    Me siento abrumado/a o mi cuerpo se siente tenso
+                                </button>
+                                
+                                <button onclick="navigate('big-emotions')" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg shadow-lg transform transition hover:scale-105">
+                                    Siento emociones grandes (triste, enojado/a, frustrado/a, emocionado/a)
+                                </button>
+                                
+                                <button onclick="navigate('sensory')" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg shadow-lg transform transition hover:scale-105">
+                                    Me siento sobreestimulado/a o mis sentidos sienten "demasiado"
+                                </button>
+                                
+                                <button onclick="navigate('tired')" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg shadow-lg transform transition hover:scale-105">
+                                    Me siento cansado/a, confuso/a o necesito espacio
+                                </button>
+                                
+                                <button onclick="navigate('not-sure')" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg shadow-lg transform transition hover:scale-105">
+                                    No estoy seguro/a de lo que siento
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'overwhelmed':
+                    content += `
+                        <div class="text-center space-y-8">
+                            <h2 class="text-3xl font-bold text-blue-700 mb-4">
+                                Te sientes abrumado/a o tenso/a
+                            </h2>
+                            <p class="text-xl text-gray-700 mb-8">
+                                ¿Quieres mover tu cuerpo?
+                            </p>
+                            
+                            <div class="flex gap-6 justify-center">
+                                <button onclick="navigate('somatic')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-6 px-12 rounded-lg shadow-lg text-xl transform transition hover:scale-105">
+                                    SÍ
+                                </button>
+                                
+                                <button onclick="navigate('grounding')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-6 px-12 rounded-lg shadow-lg text-xl transform transition hover:scale-105">
+                                    NO
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'big-emotions':
+                    content += `
+                        <div class="text-center space-y-8">
+                            <h2 class="text-3xl font-bold text-blue-700 mb-4">
+                                Sientes emociones grandes
+                            </h2>
+                            <p class="text-xl text-gray-700 mb-8">
+                                ¿Quieres expresar lo que estás sintiendo?
+                            </p>
+                            
+                            <div class="flex gap-6 justify-center">
+                                <button onclick="navigate('creative')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-6 px-12 rounded-lg shadow-lg text-xl transform transition hover:scale-105">
+                                    SÍ
+                                </button>
+                                
+                                <button onclick="navigate('music')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-6 px-12 rounded-lg shadow-lg text-xl transform transition hover:scale-105">
+                                    NO
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'not-sure':
+                    content += `
+                        <div class="text-center space-y-8">
+                            <h2 class="text-3xl font-bold text-blue-700 mb-4">
+                                No estás seguro/a de lo que sientes
+                            </h2>
+                            <p class="text-xl text-gray-700 mb-8">
+                                ¿Quieres descubrirlo moviéndote o estando quieto/a?
+                            </p>
+                            
+                            <div class="flex gap-6 justify-center">
+                                <button onclick="navigate('somatic')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-6 px-12 rounded-lg shadow-lg text-xl transform transition hover:scale-105">
+                                    EN MOVIMIENTO
+                                </button>
+                                
+                                <button onclick="navigate('quiet')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-6 px-12 rounded-lg shadow-lg text-xl transform transition hover:scale-105">
+                                    QUIETO/A
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'somatic':
+                    content += `
+                        <div class="text-center space-y-6">
+                            <div class="bg-purple-100 border-4 border-purple-600 rounded-xl p-8 max-w-2xl mx-auto">
+                                <h2 class="text-4xl font-bold text-purple-800 mb-4">
+                                    🏃 Estación 3: Estación de Reinicio Somático
+                                </h2>
+                                <p class="text-xl text-gray-700 mb-4">
+                                    ¡Esta es tu estación!
+                                </p>
+                                <p class="text-lg text-gray-600">
+                                    Hora de sacudirlo, estirarte y liberar la tensión a través del movimiento
+                                </p>
+                            </div>
+                            <button onclick="reset()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg mt-6">
+                                Comenzar de Nuevo
+                            </button>
+                        </div>
+                    `;
+                    break;
+
+                case 'grounding':
+                    content += `
+                        <div class="text-center space-y-6">
+                            <div class="bg-green-100 border-4 border-green-600 rounded-xl p-8 max-w-2xl mx-auto">
+                                <h2 class="text-4xl font-bold text-green-800 mb-4">
+                                    🧘 Estación 1: Estación de Conexión a Tierra y Respiración
+                                </h2>
+                                <p class="text-xl text-gray-700 mb-4">
+                                    ¡Esta es tu estación!
+                                </p>
+                                <p class="text-lg text-gray-600">
+                                    Hora de respiración tranquila y atención plena
+                                </p>
+                            </div>
+                            <button onclick="reset()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg mt-6">
+                                Comenzar de Nuevo
+                            </button>
+                        </div>
+                    `;
+                    break;
+
+                case 'creative':
+                    content += `
+                        <div class="text-center space-y-6">
+                            <div class="bg-yellow-100 border-4 border-yellow-600 rounded-xl p-8 max-w-2xl mx-auto">
+                                <h2 class="text-4xl font-bold text-yellow-800 mb-4">
+                                    🎨 Estación 2: Estación de Expresión Creativa
+                                </h2>
+                                <p class="text-xl text-gray-700 mb-4">
+                                    ¡Esta es tu estación!
+                                </p>
+                                <p class="text-lg text-gray-600">
+                                    Hora de dibujar, escribir y crear para expresar tus sentimientos
+                                </p>
+                            </div>
+                            <button onclick="reset()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg mt-6">
+                                Comenzar de Nuevo
+                            </button>
+                        </div>
+                    `;
+                    break;
+
+                case 'music':
+                    content += `
+                        <div class="text-center space-y-6">
+                            <div class="bg-pink-100 border-4 border-pink-600 rounded-xl p-8 max-w-2xl mx-auto">
+                                <h2 class="text-4xl font-bold text-pink-800 mb-4">
+                                    🎵 Estación 6: Estación de Música y Procesamiento Emocional
+                                </h2>
+                                <p class="text-xl text-gray-700 mb-4">
+                                    ¡Esta es tu estación!
+                                </p>
+                                <p class="text-lg text-gray-600">
+                                    Hora de escuchar, sentir y procesar tus emociones a través de la música
+                                </p>
+                            </div>
+                            <button onclick="reset()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg mt-6">
+                                Comenzar de Nuevo
+                            </button>
+                        </div>
+                    `;
+                    break;
+
+                case 'sensory':
+                    content += `
+                        <div class="text-center space-y-6">
+                            <div class="bg-blue-100 border-4 border-blue-600 rounded-xl p-8 max-w-2xl mx-auto">
+                                <h2 class="text-4xl font-bold text-blue-800 mb-4">
+                                    ✨ Estación 5: Estación de Regulación Sensorial
+                                </h2>
+                                <p class="text-xl text-gray-700 mb-4">
+                                    ¡Esta es tu estación!
+                                </p>
+                                <p class="text-lg text-gray-600">
+                                    Hora de juguetes inquietos, herramientas calmantes y entrada sensorial
+                                </p>
+                            </div>
+                            <button onclick="reset()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg mt-6">
+                                Comenzar de Nuevo
+                            </button>
+                        </div>
+                    `;
+                    break;
+
+                case 'tired':
+                    content += `
+                        <div class="text-center space-y-6">
+                            <div class="bg-indigo-100 border-4 border-indigo-600 rounded-xl p-8 max-w-2xl mx-auto">
+                                <h2 class="text-4xl font-bold text-indigo-800 mb-4">
+                                    🌙 Estación 4: Estación de Descanso Tranquilo y Reflexión
+                                </h2>
+                                <p class="text-xl text-gray-700 mb-4">
+                                    ¡Esta es tu estación!
+                                </p>
+                                <p class="text-lg text-gray-600">
+                                    Hora de espacio suave, escribir en el diario y tiempo de paz
+                                </p>
+                            </div>
+                            <button onclick="reset()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg mt-6">
+                                Comenzar de Nuevo
+                            </button>
+                        </div>
+                    `;
+                    break;
+
+                case 'quiet':
+                    content += `
+                        <div class="text-center space-y-6">
+                            <div class="bg-indigo-100 border-4 border-indigo-600 rounded-xl p-8 max-w-2xl mx-auto">
+                                <h2 class="text-4xl font-bold text-indigo-800 mb-4">
+                                    🌙 Estación 4: Estación de Descanso Tranquilo y Reflexión
+                                </h2>
+                                <p class="text-xl text-gray-700 mb-4">
+                                    ¡Esta es tu estación!
+                                </p>
+                                <p class="text-lg text-gray-600">
+                                    Hora de espacio suave, escribir en el diario y tiempo de paz
+                                </p>
+                            </div>
+                            <button onclick="reset()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg mt-6">
+                                Comenzar de Nuevo
+                            </button>
+                        </div>
+                    `;
+                    break;
+            }
+
+            content += '</div>';
+            content += `
+                <div class="text-center mt-8 text-gray-600">
+                    <p class="text-sm">
+                        ¡Sigue las preguntas para encontrar la estación de regulación perfecta para ti!
+                    </p>
+                </div>
+            `;
+
+            app.innerHTML = content;
+        }
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>
